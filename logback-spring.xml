@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <!-- ログファイルの出力先ディレクトリ -->
+    <property name="BATCH_LOGS_DIR" value="C:/Users/10260226/IdeaProjects/readcsv/readcsv/log"/>
+
+    <!-- 共通のローリングポリシーを使用するRollingFileAppenderの設定 -->
+    <appender name="BATCH_LOG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- ログファイルのパス -->
+        <file>${BATCH_LOGS_DIR}/batch.log</file>
+        <encoder>
+            <!-- ログのフォーマット -->
+            <pattern>%d{yyyy-mm-dd hh:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- ログファイルのローテーション設定 -->
+            <fileNamePattern>${BATCH_LOGS_DIR}/batch.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!-- 保持するログファイルの最大数 -->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <!-- コンソール出力の設定（オプション） -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- ルートロガーの設定 -->
+    <root level="INFO">
+        <!-- ログファイルに出力 -->
+        <appender-ref ref="BATCH_LOG_FILE"/>
+        <!-- コンソールにも出力する場合はコメントを外す -->
+        <!-- <appender-ref ref="CONSOLE"/> -->
+    </root>
+
+</configuration>

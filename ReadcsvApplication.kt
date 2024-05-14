@@ -11,19 +11,20 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 )
 @SpringBootApplication
 class ReadcsvApplication(
-	val productService: ProductService
+	val taxProductService: TaxProductService
 ) {
-	val filePath = "C:/Users/10260226/product.csv"
+	val taxProductFilePath = "C:/Users/10260226/Product2.csv"
 	val successDir = "C:/Users/10260226/finishedCSV/Success/"
 	val errorDir = "C:/Users/10260226/finishedCSV/error/"
+
 	@Bean
 	fun applicationRunner() =
 		ApplicationRunner {
-			productService.importCSVData(filePath, successDir, errorDir)
+			taxProductService.importCSVData(taxProductFilePath, successDir, errorDir)
 		}
 }
 
 fun main(args: Array<String>) {
-	val run =runApplication<ReadcsvApplication>(*args)
+	val run = runApplication<ReadcsvApplication>(*args)
 	run.close()
 }

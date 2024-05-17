@@ -20,7 +20,7 @@ class TaxProductService(private val productRepository: ProductRepository) {
     private val otherTaxRate = 0.1
 
     @Transactional
-    fun readFromCSV(filePath: String): List<TaxProduct> {
+    fun TaxAddCSV(filePath: String): List<TaxProduct> {
         val products = mutableListOf<TaxProduct>()
         try {
             File(filePath).useLines { lines ->
@@ -30,9 +30,7 @@ class TaxProductService(private val productRepository: ProductRepository) {
                         throw IllegalArgumentException("Invalid CSV format: $line")
                     }
                     val category = tokens[0]
-                    val name = tokens[1]
                     val price = tokens[2].toIntOrNull() ?: throw IllegalArgumentException("Invalid price format: ${tokens[2]}")
-                    val origin = tokens[3]
 
                     // カテゴリーごとに適切な税率を適用
                     val taxRate = if (category == "Food") foodTaxRate else otherTaxRate
@@ -40,10 +38,10 @@ class TaxProductService(private val productRepository: ProductRepository) {
                     val taxedPrice = (price * (1 + taxRate)).toInt()
 
                     val product = TaxProduct(
-                        category = category,
-                        name = name,
+                        category = tokens[0],
+                        name = tokens[1],
                         price = taxedPrice,
-                        origin = origin
+                        origin = tokens[3]
                     )
                     products.add(product)
                 }
@@ -58,7 +56,7 @@ class TaxProductService(private val productRepository: ProductRepository) {
 
     fun importCSVData(filePath: String, successDir: String, errorDir: String) {
         try {
-            val products = readFromCSV(filePath)
+            val products = TaxAddCSV(filePath)
             productRepository.saveAll(products)
             logger.info("CSV data imported into database successfully.")
             moveFile(filePath, successDir)

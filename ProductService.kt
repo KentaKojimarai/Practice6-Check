@@ -14,7 +14,7 @@ class ProductService(private val productRepository: ProductRepository) {
     private val logger = LoggerFactory.getLogger(ProductService::class.java)
 
     @Transactional
-    fun readFromCSV(filePath: String): List<Product> {
+    fun readCSV(filePath: String): List<Product> {
         val products = mutableListOf<Product>()
         try {
             File(filePath).useLines { lines ->
@@ -23,16 +23,11 @@ class ProductService(private val productRepository: ProductRepository) {
                     if (tokens.size != 4) {
                         throw IllegalArgumentException("Invalid CSV format: $line")
                     }
-                    val category = tokens[0]
-                    val name = tokens[1]
-                    val price = tokens[2].toIntOrNull() ?: throw IllegalArgumentException("Invalid price format: ${tokens[2]}")
-                    val origin = tokens[3]
-
                     val product = Product(
-                        category = category,
-                        name = name,
-                        price = price,
-                        origin = origin
+                        category = tokens[0],
+                        name = tokens[1],
+                        price = tokens[2].toIntOrNull() ?: throw IllegalArgumentException("Invalid price format: ${tokens[2]}"),
+                        origin = tokens[3]
                     )
                     products.add(product)
                 }
@@ -45,9 +40,9 @@ class ProductService(private val productRepository: ProductRepository) {
         return products
     }
 
-    fun importCSVData(filePath: String, successDir: String, errorDir: String) {
+    fun importCSV(filePath: String, successDir: String, errorDir: String) {
         try {
-            val products = readFromCSV(filePath)
+            val products = readCSV(filePath)
             productRepository.saveAll(products)
             logger.info("CSV data imported into database successfully.")
             moveFile(filePath, successDir)

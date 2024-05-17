@@ -1,7 +1,7 @@
 import java.io.File
 
 // CSVデータを処理するクラス
-class CsvDataProcessor(private val csvFilePath: String) {
+class TaxAddCsvDataCheck(private val csvFilePath: String) {
     // 行数
     private var rowCount = 0
 
@@ -9,7 +9,7 @@ class CsvDataProcessor(private val csvFilePath: String) {
     private var totalSum = 0
 
     // CSVファイルを処理して行数と合計を計算するメソッド
-    fun processCsvData() {
+    fun calculateRowCountAndTotalSum() {
         File(csvFilePath).bufferedReader().useLines { lines ->
             lines.drop(1).forEach { line ->
                 val columns = line.split(",") // CSVファイルの列を分割
@@ -31,10 +31,10 @@ class CsvDataProcessor(private val csvFilePath: String) {
 
 fun main() {
     // CSVファイルのパス
-    val csvFilePath = "C:/Users/10260226/product.csv"
+    val csvFilePath = "C:/Users/10260226/finishedCSV/Success/Product2.csv"
 
     // CsvDataProcessorクラスのインスタンスを作成して処理を行う
-    val processor = CsvDataProcessor(csvFilePath)
-    processor.processCsvData()
+    val processor = TaxAddCsvDataCheck(csvFilePath)
+    processor.calculateRowCountAndTotalSum()
     processor.printResult()
 }

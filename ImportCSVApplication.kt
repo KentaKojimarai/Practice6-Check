@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 	basePackages = ["repository"]
 )
 @SpringBootApplication
-class ReadcsvApplication(
+class ImportCSVApplication(
 	val productService: ProductService
 ) {
 	val filePath = "C:/Users/10260226/product.csv"
@@ -19,11 +19,11 @@ class ReadcsvApplication(
 	@Bean
 	fun applicationRunner() =
 		ApplicationRunner {
-			productService.importCSVData(filePath, successDir, errorDir)
+			productService.importCSV(filePath, successDir, errorDir)
 		}
 }
 
 fun main(args: Array<String>) {
-	val run =runApplication<ReadcsvApplication>(*args)
+	val run =runApplication<ImportCSVApplication>(*args)
 	run.close()
 }
